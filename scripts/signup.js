@@ -1,6 +1,6 @@
 window.addEventListener('load', function() {
     /* ---------------------- obtenemos variables globales ---------------------- */
-
+    const apiBaseUrl = 'https://ctd-todo-api.herokuapp.com/v1'
 
 
 
@@ -10,11 +10,17 @@ window.addEventListener('load', function() {
     /* -------------------------------------------------------------------------- */
     const form = document.querySelector('form');
     form.addEventListener('submit', function(event) {
+        const firstName = normalizarTexto(document.querySelector('#inputNombre').value)
+        const lastName = normalizarTexto(document.querySelector('#inputApellido').value)
+        const email = normalizarEmail(document.querySelector('#inputEmail').value)
+        const password = document.querySelector('#inputPassword').value
 
-
-
-
-
+        event.preventDefault()
+        console.log(event.target)
+        console.log(firstName)
+        console.log(lastName)
+        console.log(email);
+        console.log(password);
     });
 
     /* -------------------------------------------------------------------------- */
@@ -23,63 +29,35 @@ window.addEventListener('load', function() {
     function registrarUsuario(settings) {
         // Acá llamamos a la API
 
-
-
-
     };
 
-    document.querySelector('#inputNombre').addEventListener('blur', (e) => {
-        if (validarNombreOApellido(e.target.value) == false) {
-            mostrarErrores('El nombre no puede contener números ni guiones.');
-        }
+    document.querySelector('#inputNombre').addEventListener('keyup', (e) => {
+        validarTexto(e.target.value) == false ? mostrarErrores('El nombre no puede contener números.') : limpiarErrores()
     });
 
-    document.querySelector('#inputApellido').addEventListener('blur', (e) => {
-        if (validarNombreOApellido(e.target.value) == false) {
-            mostrarErrores('El apellido no puede contener números ni guiones.');
-        }
+    document.querySelector('#inputApellido').addEventListener('keyup', (e) => {
+        validarTexto(e.target.value) == false ? mostrarErrores('El apellido no puede contener números.') : limpiarErrores()
     });
 
     document.querySelector('#inputEmail').addEventListener('blur', (e) => {
-        console.log(e.target.value);
-        if (!validarEmail(e.target.value)) {
-            mostrarErrores('El email no tiene el formato esperado.');
-        }
+        validarEmail(e.target.value) == false ? mostrarErrores('El email no tiene el formato esperado.') : limpiarErrores()
     });
 
-
-    // const passwords = [document.querySelector('#inputPassword'), document.querySelector('#inputPasswordRepetida')];
-    // passwords.forEach(pass => {
-    //     pass.addEventListener('focus', () => {
-    //         console.log('La contraseña tiene que tener un mínimo de 4 dígitos y al menos un número.');
-    //     });
-    // });
     const pass1 = document.querySelector('#inputPassword');
     const pass2 = document.querySelector('#inputPasswordRepetida');
+    const passwordInfo = document.getElementById('passwordInfo')
 
     pass1.addEventListener('focus', () => {
-        console.log('La contraseña tiene que tener un mínimo de 4 dígitos y al menos un número.');
+        passwordInfo.innerHTML = '<small>La contraseña tiene que tener un mínimo de 4 dígitos y, al menos, un número.</small>'
     });
 
     pass1.addEventListener('blur', (e) => {
-        validarContrasenias(e);
+        passwordInfo.innerHTML = ''
+        validarContrasenias(e, pass1, pass2);
     });
 
     pass2.addEventListener('blur', (e) => {
-        validarContrasenias(e);
+        validarContrasenias(e, pass1, pass2);
     });
 
-    function validarContrasenias(e) {
-        let contraseniaValida = validarContrasenia(e.target.value) == false;
-        let contraseniasNoVacia = contraseniasNoSonVacias(pass1.value, pass2.value);
-
-        if (contraseniaValida && contraseniasNoVacia) {
-            let contraseniasIguales = compararContrasenias(pass1.value, pass2.value);
-            if (!contraseniasIguales) {
-                mostrarErrores('Las contraseñas no coniciden.');
-            } else {
-                limpiarErrores();
-            }
-        }
-    }
 });
