@@ -19,19 +19,13 @@ function normalizarEmail(email) {
 
 /* -------------------------------- password -------------------------------- */
 function validarContrasenia(contrasenia) {
-    let contains = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
     let passValid = false;
-    let i = 0;
 
-    if (contrasenia.length >= 4) {
-        while (passValid == false && i <= contains.length) {
-            if (contrasenia.includes(contains[i])) {
-                passValid = true;
-            }
-
-            i++;
-        }
-    }
+    if(contrasenia.length >= 4 && containNumber(contrasenia)) {
+        passValid = true
+        console.log('VALIDA')
+    } else { console.log('NO VALIDA');}
 
     return passValid;
 }
@@ -45,18 +39,13 @@ function contraseniasNoSonVacias(contrasenia_1, contrasenia_2) {
 }
 
 function validarNombreOApellido(text) {
-    let noValid = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, '-'];
-    let i = 0;
     let nameValid = true;
 
-    while (nameValid && i <= noValid.length) {
-        if (text.includes(noValid[i])) {
-            nameValid = false;
-        }
-
-        i++;
+    if (containNumber(text)) {
+        nameValid = false;
+        console.log('TIENE UN NUM')
     }
-
+    
     return nameValid;
 }
 
@@ -68,4 +57,9 @@ function mostrarErrores(message) {
 function limpiarErrores(message) {
     let container = document.querySelector('#errors');
     container.innerHTML = '';
+}
+
+function containNumber(text){
+    let containNumber = /\d/.test(text);
+    return containNumber
 }
