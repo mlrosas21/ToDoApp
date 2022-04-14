@@ -8,8 +8,10 @@ function validarTexto(texto) {
 }
 
 function normalizarTexto(texto) {
-    let textLowerCase = texto.trim().toLowerCase()
-    return textLowerCase[0].toUpperCase() + textLowerCase.slice(1)
+    if(texto){
+        let textLowerCase = texto.trim().toLowerCase()
+        return textLowerCase[0].toUpperCase() + textLowerCase.slice(1)
+    } 
 }
 
 /* ---------------------------------- email --------------------------------- */
@@ -19,7 +21,9 @@ function validarEmail(email) {
 }
 
 function normalizarEmail(email) {
-    return email.trim().toLowerCase()
+    if(email){
+        return email.trim().toLowerCase()
+    }
 }
 
 /* -------------------------------- password -------------------------------- */

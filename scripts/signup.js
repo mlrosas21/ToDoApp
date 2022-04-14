@@ -9,14 +9,28 @@ window.addEventListener('load', function() {
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
     /* -------------------------------------------------------------------------- */
     const form = document.querySelector('form');
+    const formInputs = document.querySelectorAll('input')
+
     form.addEventListener('submit', function(event) {
         const firstName = normalizarTexto(document.querySelector('#inputNombre').value)
         const lastName = normalizarTexto(document.querySelector('#inputApellido').value)
         const email = normalizarEmail(document.querySelector('#inputEmail').value)
         const password = document.querySelector('#inputPassword').value
-
+        
         event.preventDefault()
-        console.log(event.target)
+        let invalidInputs = 0;
+        for(input of formInputs) {
+            if(input.value == ''){
+                invalidInputs++
+            }
+        }
+        if(invalidInputs >= 1){
+            event.preventDefault()
+            alert('Existe al menos un campo vacío.')
+        }
+
+        console.log(invalidInputs)
+
         console.log(firstName)
         console.log(lastName)
         console.log(email);
@@ -36,7 +50,11 @@ window.addEventListener('load', function() {
     });
 
     document.querySelector('#inputApellido').addEventListener('keyup', (e) => {
-        validarTexto(e.target.value) == false ? mostrarErrores('El apellido no puede contener números.') : limpiarErrores()
+        if(validarTexto(e.target.value) == false){
+            mostrarErrores('El apellido no puede contener números.')
+        } else {
+            limpiarErrores()
+        }
     });
 
     document.querySelector('#inputEmail').addEventListener('blur', (e) => {
