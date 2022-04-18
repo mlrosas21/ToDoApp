@@ -65,7 +65,20 @@ function limpiarErrores() {
     container.innerHTML = '';
 }
 
+// Check whether text contains a number or not
 function containNumber(text){
     let containNumber = /\d/.test(text);
     return containNumber
+}
+
+// Verify if there is any input empty
+function verifyEmptyInputs() {
+    let allFormInputs = this.document.querySelectorAll('input')
+    let emptyInputs = 0;
+    allFormInputs.forEach(input => {
+        if(input.value == ""){
+            emptyInputs++
+        }
+    })
+    return emptyInputs >= 1
 }

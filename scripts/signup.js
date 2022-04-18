@@ -14,13 +14,16 @@ window.addEventListener('load', function() {
         const lastName = normalizarTexto(document.querySelector('#inputApellido').value)
         const email = normalizarEmail(document.querySelector('#inputEmail').value)
         const password = document.querySelector('#inputPassword').value
-
         event.preventDefault()
-        console.log(event.target)
-        console.log(firstName)
-        console.log(lastName)
-        console.log(email);
-        console.log(password);
+       
+        if(!verifyEmptyInputs()){
+            console.log(firstName)
+            console.log(lastName)
+            console.log(email);
+            console.log(password);
+        } else {
+            alert('Existen campos sin rellenar.')
+        }
     });
 
     /* -------------------------------------------------------------------------- */
@@ -59,5 +62,7 @@ window.addEventListener('load', function() {
     pass2.addEventListener('blur', (e) => {
         validarContrasenias(e, pass1, pass2);
     });
+
+    
 
 });
