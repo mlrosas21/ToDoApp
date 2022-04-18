@@ -1,6 +1,8 @@
 window.addEventListener('load', function() {
 /* ---------------------- obtenemos variables globales ---------------------- */
-
+const form = document.querySelector('#loginForm');
+const urlBase = 'https://ctd-todo-api.herokuapp.com/v1';
+const tokenKey = 'tkn';
 
 
 
@@ -8,13 +10,11 @@ window.addEventListener('load', function() {
 /* -------------------------------------------------------------------------- */
 /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
 /* -------------------------------------------------------------------------- */
-const form = document.querySelector('#loginForm');
 form.addEventListener('submit', function(e) {
-    
-    e.preventDefault()
-    console.log(e.target)
-       
-    let email 
+    const email = normalizarEmail(document.querySelector('#inputEmail').value)
+    const password = document.querySelector('#inputPassword').value
+    e.preventDefault() 
+    atLeastOneEmptyInput() == false ? realizarLogin(email, password) : alert('Por favor, completar la información solicitada')
     
     
 });
@@ -23,14 +23,13 @@ form.addEventListener('submit', function(e) {
 /* -------------------------------------------------------------------------- */
 /*                     FUNCIÓN 2: Realizar el login [POST]                    */
 /* -------------------------------------------------------------------------- */
-const urlBase = 'https://ctd-todo-api.herokuapp.com/v1';
-const keyToken = 'token';
 
-function realizarLogin(mail, pass) {
+
+function realizarLogin(email, password) {
     const urlLogin = urlBase + '/users/login';
     const settings = {
         method: 'POST',
-        body: JSON.stringify({ email: mail, password: pass }),
+        body: JSON.stringify({ email: email, password: password }),
         headers: {
             'Content-Type': 'application/json'
         }
@@ -48,13 +47,18 @@ function realizarLogin(mail, pass) {
             })
             .then(data => {
                 if (data) {
-                    sessionStorage.setItem(keyToken, data.jwt);
+                    sessionStorage.setItem(tokenKey, data.jwt);
                     location.replace('mis-tareas.html');
                 }
             });
         };
         
-        function showMessage(message) {
-            alert(message);
-        }
+    function showMessage(message) {
+        alert(message);
+    }
+
+    document.querySelector('#inputEmail').addEventListener('blur', (e) => {
+        validarEmail(e.target.value) == false ? mostrarErrores('El email no tiene el formato esperado.') : limpiarErrores()
     });
+
+})
