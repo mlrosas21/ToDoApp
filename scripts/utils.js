@@ -1,7 +1,7 @@
 /* ---------------------------------- texto --------------------------------- */
 function validarTexto(texto) {
     let nameValid = true;
-    if (containNumber(texto)) {
+    if (containAtLeastOneNumber(texto)) {
         nameValid = false;
     }
     return nameValid;
@@ -30,7 +30,7 @@ function normalizarEmail(email) {
 function validarContrasenia(contrasenia) {
     let passValid = false;
 
-    if(contrasenia.length >= 4 && containNumber(contrasenia)) {
+    if(contrasenia.length >= 4 && containAtLeastOneNumber(contrasenia)) {
         passValid = true
     } 
 
@@ -56,20 +56,35 @@ function validarContrasenias(e, pass1, pass2) {
         } else {
             limpiarErrores();
         }
-    }
+    } 
 }
 
+// Mostrar errores en HTML
 function mostrarErrores(message) {
     let container = document.querySelector('#errors');
     container.innerHTML = `<li><small>${message}</small></li>`;
 }
 
+// Limpiar sección errores del HTML
 function limpiarErrores() {
     let container = document.querySelector('#errors');
     container.innerHTML = '';
 }
 
-function containNumber(text){
+// Verificar que un string contenga números
+function containAtLeastOneNumber(text){
     let containNumber = /\d/.test(text);
     return containNumber
+}
+
+// Verificar si existe al menos un input vacío
+function atLeastOneEmptyInput() {
+    const formInputs = document.querySelectorAll('input')
+    let invalidInputs = 0;
+    for(input of formInputs) {
+        if(input.value == ''){
+            invalidInputs++
+        }
+    }
+    return invalidInputs >= 1
 }

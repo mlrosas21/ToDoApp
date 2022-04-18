@@ -1,47 +1,53 @@
 window.addEventListener('load', function() {
     /* ---------------------- obtenemos variables globales ---------------------- */
     const apiBaseUrl = 'https://ctd-todo-api.herokuapp.com/v1'
-
-
-
+    const tokenKey = 'tkn'
 
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
     /* -------------------------------------------------------------------------- */
     const form = document.querySelector('form');
-    const formInputs = document.querySelectorAll('input')
+
 
     form.addEventListener('submit', function(event) {
         const firstName = normalizarTexto(document.querySelector('#inputNombre').value)
         const lastName = normalizarTexto(document.querySelector('#inputApellido').value)
         const email = normalizarEmail(document.querySelector('#inputEmail').value)
         const password = document.querySelector('#inputPassword').value
-        
         event.preventDefault()
-        let invalidInputs = 0;
-        for(input of formInputs) {
-            if(input.value == ''){
-                invalidInputs++
-            }
-        }
-        if(invalidInputs >= 1){
-            event.preventDefault()
-            alert('Existe al menos un campo vacío.')
-        }
-
-        console.log(invalidInputs)
-
-        console.log(firstName)
-        console.log(lastName)
-        console.log(email);
-        console.log(password);
+        atLeastOneEmptyInput() == false ? registrarUsuario(firstName, lastName, email, password) : alert('Existen 1 o más campos vacíos')
     });
 
     /* -------------------------------------------------------------------------- */
     /*                    FUNCIÓN 2: Realizar el signup [POST]                    */
     /* -------------------------------------------------------------------------- */
-    function registrarUsuario(settings) {
-        // Acá llamamos a la API
+    function registrarUsuario(firstName, lastName, email, password) {
+        const urlLogin = apiBaseUrl + '/users'
+        const settings = {
+            method: 'POST',
+            body: JSON.stringify({firstName: firstName, lastName: lastName, email: email, password: password}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        
+        fetch(urlLogin, settings)
+        .then(response => {
+            if(response.status == 400){
+                alert('Inválido')
+            } else if (response.status == 500) {
+                alert('Error al conectarse con el servidor')
+            } else if (response.status == 201) {
+                alert('Usuario creado satisfactoriamente!')
+                return response.json()
+            }
+        })
+        .then(data => {
+            if(data) {
+                sessionStorage.setItem(tokenKey, data.jwt)
+                location.replace('mis-tareas.html')
+            }
+        })
 
     };
 
