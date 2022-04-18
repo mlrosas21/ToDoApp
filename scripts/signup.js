@@ -15,19 +15,7 @@ window.addEventListener('load', function() {
         const email = normalizarEmail(document.querySelector('#inputEmail').value)
         const password = document.querySelector('#inputPassword').value
         event.preventDefault()
-<<<<<<< HEAD
-       
-        if(!verifyEmptyInputs()){
-            console.log(firstName)
-            console.log(lastName)
-            console.log(email);
-            console.log(password);
-        } else {
-            alert('Existen campos sin rellenar.')
-        }
-=======
         atLeastOneEmptyInput() == false ? registrarUsuario(firstName, lastName, email, password) : alert('Existen 1 o más campos vacíos')
->>>>>>> 1ad37376d6143169e13d61c0894d76620afd88b4
     });
 
     /* -------------------------------------------------------------------------- */

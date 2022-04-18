@@ -71,29 +71,12 @@ function limpiarErrores() {
     container.innerHTML = '';
 }
 
-<<<<<<< HEAD
-// Check whether text contains a number or not
-function containNumber(text){
-=======
 // Verificar que un string contenga números
 function containAtLeastOneNumber(text){
->>>>>>> 1ad37376d6143169e13d61c0894d76620afd88b4
     let containNumber = /\d/.test(text);
     return containNumber
 }
 
-<<<<<<< HEAD
-// Verify if there is any input empty
-function verifyEmptyInputs() {
-    let allFormInputs = this.document.querySelectorAll('input')
-    let emptyInputs = 0;
-    allFormInputs.forEach(input => {
-        if(input.value == ""){
-            emptyInputs++
-        }
-    })
-    return emptyInputs >= 1
-=======
 // Verificar si existe al menos un input vacío
 function atLeastOneEmptyInput() {
     const formInputs = document.querySelectorAll('input')
@@ -104,5 +87,4 @@ function atLeastOneEmptyInput() {
         }
     }
     return invalidInputs >= 1
->>>>>>> 1ad37376d6143169e13d61c0894d76620afd88b4
 }
