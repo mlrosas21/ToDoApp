@@ -88,3 +88,14 @@ function atLeastOneEmptyInput() {
     }
     return invalidInputs >= 1
 }
+
+function saveToken(token) {
+    sessionStorage.setItem(tokenKey, token);
+}
+
+function getToken() {
+    return sessionStorage.getItem(tokenKey);
+}
+
+const apiBaseUrl = 'https://ctd-todo-api.herokuapp.com/v1'
+const tokenKey = 'tkn'

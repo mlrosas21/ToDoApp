@@ -1,7 +1,6 @@
 window.addEventListener('load', function() {
     /* ---------------------- obtenemos variables globales ---------------------- */
-    const apiBaseUrl = 'https://ctd-todo-api.herokuapp.com/v1'
-    const tokenKey = 'tkn'
+
 
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
