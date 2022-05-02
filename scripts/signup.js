@@ -14,7 +14,14 @@ window.addEventListener('load', function() {
         const email = normalizarEmail(document.querySelector('#inputEmail').value)
         const password = document.querySelector('#inputPassword').value
         event.preventDefault()
-        atLeastOneEmptyInput() == false ? registrarUsuario(firstName, lastName, email, password) : alert('Existen 1 o más campos vacíos')
+        mostrarSpinner()
+        if(!atLeastOneEmptyInput()){
+            registrarUsuario(firstName, lastName, email, password)
+        } else{
+            ocultarSpinner()
+            alert('Existen 1 o más campos vacíos')
+        }
+    
     });
 
     /* -------------------------------------------------------------------------- */
@@ -24,18 +31,24 @@ window.addEventListener('load', function() {
         const urlLogin = apiBaseUrl + '/users'
         const settings = {
             method: 'POST',
-            body: JSON.stringify({firstName: firstName, lastName: lastName, email: email, password: password}),
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                firstName: firstName, 
+                lastName: lastName, 
+                email: email, 
+                password: password}),
         }
         
         fetch(urlLogin, settings)
         .then(response => {
             if(response.status == 400){
                 alert('Inválido')
+                ocultarSpinner()
             } else if (response.status == 500) {
                 alert('Error al conectarse con el servidor')
+                ocultarSpinner()
             } else if (response.status == 201) {
                 alert('Usuario creado satisfactoriamente!')
                 return response.json()
@@ -46,6 +59,10 @@ window.addEventListener('load', function() {
                 sessionStorage.setItem(tokenKey, data.jwt)
                 location.replace('mis-tareas.html')
             }
+        })
+        .catch((error) => {
+            console.error(error)
+            ocultarSpinner()
         })
 
     };
