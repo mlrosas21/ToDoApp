@@ -13,10 +13,14 @@ const tokenKey = 'tkn';
 form.addEventListener('submit', function(e) {
     const email = normalizarEmail(document.querySelector('#inputEmail').value)
     const password = document.querySelector('#inputPassword').value
-    e.preventDefault() 
-    atLeastOneEmptyInput() == false ? realizarLogin(email, password) : alert('Por favor, completar la información solicitada')
-    
-    
+    e.preventDefault()
+    mostrarSpinner()
+    if(!atLeastOneEmptyInput()){
+        realizarLogin(email, password)
+    } else {
+        ocultarSpinner()
+        alert('Por favor, completar la información solicitada')
+    }    
 });
 
 
@@ -29,29 +33,35 @@ function realizarLogin(email, password) {
     const urlLogin = urlBase + '/users/login';
     const settings = {
         method: 'POST',
-        body: JSON.stringify({ email: email, password: password }),
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({ email: email, password: password })
     };
     
     fetch(urlLogin, settings)
     .then(response => {
         if (response.status == 400 || response.status == 404) {
-                    showMessage('Credenciales inválidas.');
-                } else if (response.status == 500) {
-                    showMessage('Error al conectarse con el servidor, intente mas tarde.');
-                } else if (response.status == 201) {
-                    return response.json();
-                }
-            })
-            .then(data => {
-                if (data) {
-                    sessionStorage.setItem(tokenKey, data.jwt);
-                    location.replace('mis-tareas.html');
-                }
-            });
-        };
+            showMessage('Credenciales inválidas.');
+            ocultarSpinner()
+        } else if (response.status == 500) {
+            showMessage('Error al conectarse con el servidor, intente mas tarde.');
+            ocultarSpinner()
+        } else if (response.status == 201) {
+            return response.json();
+        }
+    })
+    .then(data => {
+        if (data) {
+            sessionStorage.setItem(tokenKey, data.jwt);
+            location.replace('mis-tareas.html');
+        }
+    })
+    .catch((error) => {
+        console.error(error)
+        ocultarSpinner()
+    })
+};
         
     function showMessage(message) {
         alert(message);
