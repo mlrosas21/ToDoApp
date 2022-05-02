@@ -104,3 +104,8 @@ form button:hover{
 .ingresarA a:hover{
     color: var(--azul);
 }
+
+button:disabled{
+    background-color: rgb(158 158 158);
+    pointer-events: none;
+}

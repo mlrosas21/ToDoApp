@@ -3,7 +3,7 @@ window.addEventListener('load', function() {
 const form = document.querySelector('#loginForm');
 const urlBase = 'https://ctd-todo-api.herokuapp.com/v1';
 const tokenKey = 'tkn';
-
+const submitBtn = document.querySelector('form button')
 
 
 
@@ -70,5 +70,11 @@ function realizarLogin(email, password) {
     document.querySelector('#inputEmail').addEventListener('blur', (e) => {
         validarEmail(e.target.value) == false ? mostrarErrores('El email no tiene el formato esperado.') : limpiarErrores()
     });
+
+    form.addEventListener('change', () => {
+        if(!atLeastOneEmptyInput()){
+            submitBtn.disabled = false
+        }
+    })
 
 })

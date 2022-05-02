@@ -1,12 +1,14 @@
 window.addEventListener('load', function() {
     /* ---------------------- obtenemos variables globales ---------------------- */
-
+    const form = document.querySelector('form');
+    const pass1 = document.querySelector('#inputPassword');
+    const pass2 = document.querySelector('#inputPasswordRepetida');
+    const passwordInfo = document.getElementById('passwordInfo');
+    const submitBtn = document.querySelector('form button')
 
     /* -------------------------------------------------------------------------- */
     /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
     /* -------------------------------------------------------------------------- */
-    const form = document.querySelector('form');
-
 
     form.addEventListener('submit', function(event) {
         const firstName = normalizarTexto(document.querySelector('#inputNombre').value)
@@ -83,10 +85,6 @@ window.addEventListener('load', function() {
         validarEmail(e.target.value) == false ? mostrarErrores('El email no tiene el formato esperado.') : limpiarErrores()
     });
 
-    const pass1 = document.querySelector('#inputPassword');
-    const pass2 = document.querySelector('#inputPasswordRepetida');
-    const passwordInfo = document.getElementById('passwordInfo')
-
     pass1.addEventListener('focus', () => {
         passwordInfo.innerHTML = '<small>La contraseña tiene que tener un mínimo de 4 dígitos y, al menos, un número.</small>'
     });
@@ -100,6 +98,10 @@ window.addEventListener('load', function() {
         validarContrasenias(e, pass1, pass2);
     });
 
-    
+    form.addEventListener('change', () => {
+        if(!atLeastOneEmptyInput()){
+            submitBtn.disabled = false
+        }
+    })
 
 });
