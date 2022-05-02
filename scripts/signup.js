@@ -58,7 +58,7 @@ window.addEventListener('load', function() {
         })
         .then(data => {
             if(data) {
-                sessionStorage.setItem(tokenKey, data.jwt)
+                localStorage.setItem(tokenKey, data.jwt)
                 location.replace('mis-tareas.html')
             }
         })

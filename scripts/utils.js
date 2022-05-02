@@ -90,11 +90,11 @@ function atLeastOneEmptyInput() {
 }
 
 function saveToken(token) {
-    sessionStorage.setItem(tokenKey, token);
+    localStorage.setItem(tokenKey, token);
 }
 
 function getToken() {
-    return sessionStorage.getItem(tokenKey);
+    return localStorage.getItem(tokenKey);
 }
 
 const apiBaseUrl = 'https://ctd-todo-api.herokuapp.com/v1'

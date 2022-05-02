@@ -8,10 +8,13 @@ if (getToken() == null) {
 
 /* ------ comienzan las funcionalidades una vez que carga el documento ------ */
 window.addEventListener('load', function() {
+    renderizarSkeletons(5, ".tareas-pendientes")
+    setTimeout(consultarTareas, 1150)
 
     /* ---------------- variables globales y llamado a funciones ---------------- */
-
-
+    const formCrearTarea = document.querySelector('form');
+    const tareasPendientes = document.querySelector('.tareas-pendientes');
+    const tareasTerminadas = document.querySelector('.tareas-terminadas');
 
     /* -------------------------------------------------------------------------- */
     /*                          FUNCIÓN 1 - Cerrar sesión                         */
@@ -40,6 +43,10 @@ window.addEventListener('load', function() {
     /*                 FUNCIÓN 3 - Obtener listado de tareas [GET]                */
     /* -------------------------------------------------------------------------- */
 
+    function renderizarTareasConDelay(){
+        
+    }
+
     function consultarTareas() {
         const urlTask = apiBaseUrl + '/tasks';
         const settings = {
@@ -50,20 +57,21 @@ window.addEventListener('load', function() {
         };
 
         fetch(urlTask, settings)
-            .then(response => {
+        .then(response => {
                 return response.json();
-            })
-            .then(data => {
+        })
+        .then(data => {
+                removerSkeleton('.tareas-pendientes')
                 renderizarTareas(data);
-            });
+        });
     };
 
-    consultarTareas();
+
 
     /* -------------------------------------------------------------------------- */
     /*                    FUNCIÓN 4 - Crear nueva tarea [POST]                    */
     /* -------------------------------------------------------------------------- */
-    const formCrearTarea = document.querySelector('form');
+
     formCrearTarea.addEventListener('submit', function(event) {
         event.preventDefault();
         const description = document.querySelector('#nuevaTarea').value;
@@ -95,10 +103,8 @@ window.addEventListener('load', function() {
     /*                  FUNCIÓN 5 - Renderizar tareas en pantalla                 */
     /* -------------------------------------------------------------------------- */
     function renderizarTareas(listado) {
-
         // obtengo listados y limpio cualquier contenido interno
-        const tareasPendientes = document.querySelector('.tareas-pendientes');
-        const tareasTerminadas = document.querySelector('.tareas-terminadas');
+
         tareasPendientes.innerHTML = "";
         tareasTerminadas.innerHTML = "";
 
@@ -154,7 +160,7 @@ window.addEventListener('load', function() {
         let changeBtns = document.querySelectorAll('.change');
         for (btn of changeBtns){
             btn.addEventListener('click', (e) => {
-                
+
                 const urlTask = apiBaseUrl + '/tasks/' + e.target.id
                 const settings = {
                     method: 'PUT',
@@ -166,12 +172,14 @@ window.addEventListener('load', function() {
                 };
         
                 fetch(urlTask, settings)
-                    .then(response => {
+                .then(response => {
                         return response.json();
-                    })
-                    .then(data => {
+                })
+                .then(data => {
                         console.log(data);
-                    });
+                });
+
+                consultarTareas()
                     
             })        
         }
@@ -196,12 +204,12 @@ window.addEventListener('load', function() {
                 };
         
                 fetch(urlTask, settings)
-                    .then(response => {
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    });
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    consultarTareas();
+                });
             })
         }
     };
