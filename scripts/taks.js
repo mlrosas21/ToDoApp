@@ -10,12 +10,14 @@ if (getToken() == null) {
 window.addEventListener('load', function() {
     renderizarSkeletons(5, ".tareas-pendientes")
     setTimeout(consultarTareas, 1000)
+    obtenerNombreUsuario()
 
     /* ---------------- variables globales y llamado a funciones ---------------- */
     const formCrearTarea = document.querySelector('form');
     const tareasPendientes = document.querySelector('.tareas-pendientes');
     const tareasTerminadas = document.querySelector('.tareas-terminadas');
     const btnCerrarSesion = document.getElementById('closeApp')
+    const username = document.querySelector('.user-info p')
 
     /* -------------------------------------------------------------------------- */
     /*                          FUNCIÓN 1 - Cerrar sesión                         */
@@ -31,21 +33,27 @@ window.addEventListener('load', function() {
     /* -------------------------------------------------------------------------- */
 
     function obtenerNombreUsuario() {
+        const urlUserInfo = apiBaseUrl + '/users/getMe';
+        const settings = {
+            method: 'GET',
+            headers: {
+                'Authorization': getToken()
+            }
+        };
 
-
-
-
+        fetch(urlUserInfo, settings)
+        .then(response => {
+                return response.json();
+        })
+        .then(data => {
+                username.innerHTML = `<p>${data.firstName} ${data.lastName}</p>`
+        });
     };
 
 
     /* -------------------------------------------------------------------------- */
     /*                 FUNCIÓN 3 - Obtener listado de tareas [GET]                */
     /* -------------------------------------------------------------------------- */
-
-    function renderizarTareasConDelay(){
-        
-    }
-
     function consultarTareas() {
         const urlTask = apiBaseUrl + '/tasks';
         const settings = {
@@ -65,8 +73,6 @@ window.addEventListener('load', function() {
         });
     };
 
-
-
     /* -------------------------------------------------------------------------- */
     /*                    FUNCIÓN 4 - Crear nueva tarea [POST]                    */
     /* -------------------------------------------------------------------------- */
@@ -79,22 +85,28 @@ window.addEventListener('load', function() {
         const urlTask = apiBaseUrl + '/tasks';
         const settings = {
             method: 'POST',
-            body: JSON.stringify(task),
             headers: {
                 'Authorization': getToken(),
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(task),
         };
 
         fetch(urlTask, settings)
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    consultarTareas();
-                }
-            });
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data) {
+                consultarTareas();
+                Toastify({
+                    text: "Tarea agregada exitosamente",
+                    duration: 3000
+                    }).showToast();
+            }
+        });
+
+        formCrearTarea.reset()
     });
 
 
@@ -103,7 +115,6 @@ window.addEventListener('load', function() {
     /* -------------------------------------------------------------------------- */
     function renderizarTareas(listado) {
         // obtengo listados y limpio cualquier contenido interno
-
         tareasPendientes.innerHTML = "";
         tareasTerminadas.innerHTML = "";
 
@@ -118,7 +129,7 @@ window.addEventListener('load', function() {
 
             if (tarea.completed) {
                 contador++;
-                //lo mandamos al listado de tareas completas
+                // Al listado de tareas completas
                 tareasTerminadas.innerHTML += `
               <li class="tarea">
                 <div class="hecha">
@@ -134,7 +145,7 @@ window.addEventListener('load', function() {
               </li>
                             `
             } else {
-                //lo mandamos al listado de tareas sin terminar
+                // Al listado de tareas sin terminar
                 tareasPendientes.innerHTML += `
               <li class="tarea">
                 <button class="change" id="${tarea.id}"><i class="fa-regular fa-circle"></i></button>
@@ -145,7 +156,7 @@ window.addEventListener('load', function() {
               </li>
                             `
             }
-            // actualizamos el contador en la pantalla
+            // Actualiza contador en pantalla
             numeroFinalizadas.innerText = contador;
         })
         botonesCambioEstado()
