@@ -9,23 +9,22 @@ if (getToken() == null) {
 /* ------ comienzan las funcionalidades una vez que carga el documento ------ */
 window.addEventListener('load', function() {
     renderizarSkeletons(5, ".tareas-pendientes")
-    setTimeout(consultarTareas, 1150)
+    setTimeout(consultarTareas, 1000)
 
     /* ---------------- variables globales y llamado a funciones ---------------- */
     const formCrearTarea = document.querySelector('form');
     const tareasPendientes = document.querySelector('.tareas-pendientes');
     const tareasTerminadas = document.querySelector('.tareas-terminadas');
+    const btnCerrarSesion = document.getElementById('closeApp')
 
     /* -------------------------------------------------------------------------- */
     /*                          FUNCIÓN 1 - Cerrar sesión                         */
     /* -------------------------------------------------------------------------- */
 
-    // btnCerrarSesion.addEventListener('click', function() {
-
-
-
-
-    // });
+    btnCerrarSesion.addEventListener('click', function() {
+        localStorage.removeItem(tokenKey)
+        location.reload()
+    });
 
     /* -------------------------------------------------------------------------- */
     /*                 FUNCIÓN 2 - Obtener nombre de usuario [GET]                */
@@ -160,11 +159,17 @@ window.addEventListener('load', function() {
         let changeBtns = document.querySelectorAll('.change');
         for (btn of changeBtns){
             btn.addEventListener('click', (e) => {
-
+                let payload;
+                if(e.target.classList.contains('incompleta')){
+                    payload = {completed: false}
+                } else {
+                    payload = {completed: true}
+                }
+                
                 const urlTask = apiBaseUrl + '/tasks/' + e.target.id
                 const settings = {
                     method: 'PUT',
-                    body: JSON.stringify({completed: true}),
+                    body: JSON.stringify(payload),
                     headers: {
                         'Authorization': getToken(),
                         'Content-Type': 'application/json'
@@ -177,10 +182,8 @@ window.addEventListener('load', function() {
                 })
                 .then(data => {
                         console.log(data);
-                });
-
-                consultarTareas()
-                    
+                        consultarTareas()
+                });     
             })        
         }
 
